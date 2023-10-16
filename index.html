@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+
+        .container {
+            margin: 100px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            border-radius: 5px;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <select id="sourceCurrency">
+            <!-- Dynamically populated with currency options from API -->
+        </select>
+        <input type="number" id="amount" placeholder="Enter Amount">
+        <select id="targetCurrency">
+            <!-- Dynamically populated with currency options from API -->
+        </select>
+        <button id="convertButton">Convert</button>
+        <p>Converted Amount: <span id="result"></span></p>
+    </div>
+
+    <script>
+        const sourceCurrencySelect = document.getElementById('sourceCurrency');
+        const targetCurrencySelect = document.getElementById('targetCurrency');
+        const amountInput = document.getElementById('amount');
+        const convertButton = document.getElementById('convertButton');
+        const resultSpan = document.getElementById('result');
+
+        // Make an API request to fetch currency options
+        fetch('https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_gDyvleISoSzekMeQpRf0C9JYYUSszwn5cNfIvdoq')
+            .then(response => response.json())
+            .then(data => {
+                const currencies = Object.keys(data.data);
+                currencies.forEach(currency => {
+                    sourceCurrencySelect.innerHTML += `<option value="${currency}">${currency}</option>`;
+                    targetCurrencySelect.innerHTML += `<option value="${currency}">${currency}</option>`;
+                });
+            });
+
+        convertButton.addEventListener('click', () => {
+            const sourceCurrency = sourceCurrencySelect.value;
+            const targetCurrency = targetCurrencySelect.value;
+            const amount = parseFloat(amountInput.value);
+
+            // Make an API request to fetch the exchange rate
+            fetch(`https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_gDyvleISoSzekMeQpRf0C9JYYUSszwn5cNfIvdoq&base_currency=${sourceCurrency}&currencies=${targetCurrency}`)
+                .then(response => response.json())
+                .then(data => {
+                    const exchangeRate = data.data[targetCurrency];
+                    const convertedAmount = amount * exchangeRate;
+                    resultSpan.textContent = `${amount} ${sourceCurrency} = ${convertedAmount.toFixed(2)} ${targetCurrency}`;
+                });
+        });
+    </script>
+</body>
+</html>
