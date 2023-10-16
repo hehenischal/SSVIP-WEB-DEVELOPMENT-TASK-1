@@ -37,11 +37,9 @@
     <div class="container">
         <h1>Currency Converter</h1>
         <select id="sourceCurrency">
-            <!-- Dynamically populated with currency options from API -->
         </select>
         <input type="number" id="amount" placeholder="Enter Amount">
         <select id="targetCurrency">
-            <!-- Dynamically populated with currency options from API -->
         </select>
         <button id="convertButton">Convert</button>
         <p>Converted Amount: <span id="result"></span></p>
@@ -54,7 +52,6 @@
         const convertButton = document.getElementById('convertButton');
         const resultSpan = document.getElementById('result');
 
-        // Make an API request to fetch currency options
         fetch('https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_gDyvleISoSzekMeQpRf0C9JYYUSszwn5cNfIvdoq')
             .then(response => response.json())
             .then(data => {
@@ -70,7 +67,6 @@
             const targetCurrency = targetCurrencySelect.value;
             const amount = parseFloat(amountInput.value);
 
-            // Make an API request to fetch the exchange rate
             fetch(`https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_gDyvleISoSzekMeQpRf0C9JYYUSszwn5cNfIvdoq&base_currency=${sourceCurrency}&currencies=${targetCurrency}`)
                 .then(response => response.json())
                 .then(data => {
